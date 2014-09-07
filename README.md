@@ -26,32 +26,59 @@ from imbox import Imbox
 
 imbox = Imbox('imap.gmail.com', ssl=True)
 imbox.login('username', 'password')
+```
 
-# Gets all messages
+Get all messages as a list of tuples `(msg_uid, msg_struct)`:
+
+```python
 all_messages = imbox.messages()
+```
 
-# Unread messages
-unread_messages = imbox.messages(unread=True)
+Get unread messages
 
-# Messages sent FROM
+```python
+unread_messages = imbox.messages(seen=False)
+```
+
+Get messages sent *from* given address:
+
+```python
 messages_from = imbox.messages(from_='martin@amon.cx')
+```
 
-# Messages sent TO
+Get messages sent *to* given address:
+
+```python
 messages_from = imbox.messages(to='martin@amon.cx')
+```
 
-# Messages received before specific date
+Get messages received before the specified date:
+
+```python
 messages_from = imbox.messages(before='31-July-2013')
+```
 
-# Messages received after specific date
+Get messages received after the specified date:
+
+```python
 messages_from = imbox.messages(since='30-July-2013')
+```
 
-# Messages from a specific folder
+Get messages from specified folder:
+
+```python
 messages_folder = imbox.messages(folder='Social')
+```
 
+Loop over messages:
 
+```python
 for uid, message in all_messages:
-    ........
-    # Every message is an object with the following attributes
+    [...]
+```
+
+Every message is an `imbox.MessageStruct` instance, which has the following
+attributes:
 
     message.from_
     message.sender
@@ -69,44 +96,49 @@ for uid, message in all_messages:
     message.attachments (a list of `io.BytesIO` instances)
     message.message (an `email.message.Message` instance)
 
-    # To check all available keys
-    print(message.keys())
+To check all available keys:
 
-    # To check the whole object, just write
-    print(message)
+```python
+print(message.keys())
+```
 
-    {
-        'headers':
-            [{
-                'name': 'Received-SPF',
-                'value': 'pass (google.com: domain of ......;'
-            },
-            {
-                'name': 'MIME-Version',
-                'value': '1.0'
-            }],
-        'body': {
-            'plain: ['ASCII'],
-            'html': ['HTML BODY']
-    },
-    'attachments': [{
-        'content': <io.BytesIO instance at 0x7f8e8445fa70>,
-        'filename': "avatar.png",
-        'content-type': 'image/png',
-        'size': 80264
-    }],
-    'date': 'Fri, 26 Jul 2013 10:56:26 +0300',
-    'message_id': '51F22BAA.1040606',
-    'sent_from': [{
-        'name': 'Martin Rusev',
-        'email': 'martin@amon.cx'
-    }],
-    'sent_to': [{
-        'name': 'John Doe',
-        'email': 'john@gmail.com'
-    }],
-    'subject': 'Hello John, How are you today'
-    }
+To check the whole object, just write:
+
+```python
+print(message)
+
+{
+    'headers':
+        [{
+            'name': 'Received-SPF',
+            'value': 'pass (google.com: domain of ......;'
+        },
+        {
+            'name': 'MIME-Version',
+            'value': '1.0'
+        }],
+    'body': {
+        'plain: ['ASCII'],
+        'html': ['HTML BODY']
+},
+'attachments': [{
+    'content': <io.BytesIO instance at 0x7f8e8445fa70>,
+    'filename': "avatar.png",
+    'content-type': 'image/png',
+    'size': 80264
+}],
+'date': 'Fri, 26 Jul 2013 10:56:26 +0300',
+'message_id': '51F22BAA.1040606',
+'sent_from': [{
+    'name': 'Martin Rusev',
+    'email': 'martin@amon.cx'
+}],
+'sent_to': [{
+    'name': 'John Doe',
+    'email': 'john@gmail.com'
+}],
+'subject': 'Hello John, How are you today'
+}
 ```
 
 Roadmap
