@@ -34,7 +34,7 @@ Get all messages as a list of tuples `(msg_uid, msg_struct)`:
 all_messages = imbox.messages()
 ```
 
-Get unread messages
+Get unread messages:
 
 ```python
 unread_messages = imbox.messages(seen=False)
