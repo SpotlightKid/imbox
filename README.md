@@ -51,21 +51,26 @@ messages_folder = imbox.messages(folder='Social')
 
 for uid, message in all_messages:
     ........
-    # Every message is an object with the following keys
+    # Every message is an object with the following attributes
 
-    message.sent_from
-    message.sent_to
+    message.from_
+    message.sender
+    message.reply_to
+    message.to
+    message.cc
+    message.bcc
     message.subject
     message.headers
     message.message_id
     message.date
-    message.body.plain
-    message.body.html
-    message.attachments
+    message.parsed_date
+    message.body.plain (a list of byte strings)
+    message.body.html (a list of byte strings)
+    message.attachments (a list of `io.BytesIO` instances)
+    message.message (an `email.message.Message` instance)
 
     # To check all available keys
-    print message.keys()
-
+    print(message.keys())
 
     # To check the whole object, just write
     print(message)
@@ -90,17 +95,17 @@ for uid, message in all_messages:
         'content-type': 'image/png',
         'size': 80264
     }],
-    'date': u 'Fri, 26 Jul 2013 10:56:26 +0300',
-    'message_id': u '51F22BAA.1040606',
+    'date': 'Fri, 26 Jul 2013 10:56:26 +0300',
+    'message_id': '51F22BAA.1040606',
     'sent_from': [{
-        'name': u 'Martin Rusev',
+        'name': 'Martin Rusev',
         'email': 'martin@amon.cx'
     }],
     'sent_to': [{
-        'name': u 'John Doe',
+        'name': 'John Doe',
         'email': 'john@gmail.com'
     }],
-    'subject': u 'Hello John, How are you today'
+    'subject': 'Hello John, How are you today'
     }
 ```
 
