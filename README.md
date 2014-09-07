@@ -120,24 +120,25 @@ print(message)
     'body': {
         'plain: ['ASCII'],
         'html': ['HTML BODY']
-},
-'attachments': [{
-    'content': <io.BytesIO instance at 0x7f8e8445fa70>,
-    'filename': "avatar.png",
-    'content-type': 'image/png',
-    'size': 80264
-}],
-'date': 'Fri, 26 Jul 2013 10:56:26 +0300',
-'message_id': '51F22BAA.1040606',
-'sent_from': [{
-    'name': 'Martin Rusev',
-    'email': 'martin@amon.cx'
-}],
-'sent_to': [{
-    'name': 'John Doe',
-    'email': 'john@gmail.com'
-}],
-'subject': 'Hello John, How are you today'
+    },
+    'attachments': [{
+        'content': <io.BytesIO instance at 0x7f8e8445fa70>,
+        'filename': "avatar.png",
+        'content-type': 'image/png',
+        'size': 80264
+    }],
+    'date': 'Fri, 26 Jul 2013 10:56:26 +0300',
+    'parse_date': datetime.datetime(2013, 7, 26, 10, 56, 26),
+    'message_id': '51F22BAA.1040606',
+    'from_': [{
+        'name': 'Martin Rusev',
+        'email': 'martin@amon.cx'
+    }],
+    'to': [{
+        'name': 'John Doe',
+        'email': 'john@gmail.com'
+    }],
+    'subject': 'Hello John, How are you today'
 }
 ```
 
