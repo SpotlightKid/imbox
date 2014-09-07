@@ -1,62 +1,40 @@
-from imbox.imap import ImapTransport
-from imbox.parser import parse_email
-from imbox.query import build_search_query
+# -*- coding: utf-8 -*-
 
-class Imbox(object):
+from __future__ import absolute_import
 
-    def __init__(self, hostname, username=None, password=None, ssl=True):
+__all__ = ('Imbox', 'build_search_query', 'parse_email')
 
-        self.server = ImapTransport(hostname, ssl=ssl)
-        self.username = username
-        self.password = password
-        self.connection = self.server.connect(username, password)
+from imapclient import IMAPClient
+
+from .parser import parse_email
+from .query import build_search_query
 
 
-    def logout(self):
-        self.connection.close()
-        self.connection.logout()
-
-    def query_uids(self, **kwargs):
-        query = build_search_query(**kwargs)
-
-        message, data = self.connection.uid('search', None, query)
+class Imbox(IMAPClient):
+    def query_uids(self, *args, **kwargs):
+        query = build_search_query(*args, **kwargs)
+        message, data = self._imap.uid('search', None, query)
         return data[0].split()
 
-    def fetch_by_uid(self, uid):
-        message, data = self.connection.uid('fetch', uid, '(BODY.PEEK[])')
-        raw_email = data[0][1]
+    def fetch_query(self, **kwargs):
+        uids = self.query_uids(**kwargs)
 
-        email_object = parse_email(raw_email)
+        return ((msgnum, parse_email(data['BODY[]']))
+            for msgnum, data in self.fetch(uids, 'BODY.PEEK[]').items())
 
-        return email_object
+    def mark_seen(self, uids):
+        self.add_flags(uids, SEEN)
 
-    def fetch_list(self, **kwargs):
-        uid_list = self.query_uids(**kwargs)
-
-        for uid in uid_list:
-            yield (uid, self.fetch_by_uid(uid))
-
-    def mark_seen(self, uid):
-        self.connection.uid('STORE', uid, '+FLAGS', '(\\Seen)')
-
-    def delete(self, uid):
-        mov, data = self.connection.uid('STORE', uid, '+FLAGS', '(\\Deleted)')
-        self.connection.expunge()
-
-    def copy(self, uid, destination_folder):
-        return self.connection.uid('COPY', uid, destination_folder)
-
-    def move(self, uid, destination_folder):
+    def move(self, uids, destination_folder):
         if self.copy(uid, destination_folder):
-            self.delete(uid)
+            self.delete_messages(uids)
 
     def messages(self, *args, **kwargs):
         folder = kwargs.get('folder', False)
-        
-        if folder:
-            self.connection.select(folder)
 
-        return self.fetch_list(**kwargs)
-        
-    def folders(self):
-        return self.connection.list()
+        if folder:
+            self.select_folder(folder)
+        elif self._imap.state != 'SELECTED':
+            self.select_folder('INBOX')
+
+        return list(self.fetch_query(**kwargs))
