@@ -24,7 +24,8 @@ Usage
 ```python
 from imbox import Imbox
 
-imbox = Imbox('imap.gmail.com', ssl=True)
+imbox = Imbox('imap.gmail.com')
+imbox.starttls()
 imbox.login('username', 'password')
 ```
 
