@@ -5,7 +5,7 @@ import os
 
 from setuptools import setup
 
-version = '0.5.5'
+version = '0.6'
 
 
 def read(filename):
@@ -24,9 +24,9 @@ setup(
     url='https://github.com/spotlightkid/imbox',
     license='MIT',
     packages=['imbox'],
-    package_dir={'imbox':'imbox'},
+    package_dir={'imbox': 'imbox'},
     install_requires=['imapclient'],
-    tests_require=['nose>=1.0'],
-    test_suite = 'nose.collector',
+    tests_require=['nose>=1.0', 'tox'],
+    test_suite='nose.collector',
     zip_safe=False
 )
