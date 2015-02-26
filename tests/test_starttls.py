@@ -14,7 +14,7 @@ from imbox.parser import parse_email
 IMAP_HOST = "imap.web.de"
 IMAP_PORT = 143
 USER = b"chris.arndt@web.de"
-FOLDER = "testtls"
+FOLDER = b"testtls"
 
 def main(args):
     try:
@@ -22,7 +22,7 @@ def main(args):
     except IndexError:
         passwd = getpass.getpass()
 
-    #imaplib.Debug  = 4
+    imaplib.Debug  = 4
     imap = IMAP4(IMAP_HOST, IMAP_PORT)
     imap.starttls()
     imap.login(USER, passwd)
@@ -33,7 +33,7 @@ def main(args):
     try:
         for msgnum in data[0].split():
             type_, data = imap.fetch(msgnum,
-                '(BODY[HEADER.FIELDS (SUBJECT FROM)])')
+                b'(BODY[HEADER.FIELDS (SUBJECT FROM)])')
             msg = parse_email(data[0][1])
             print('[msg #{}]\nFrom: {}\nSubject: {}\n'.format(
                   int(msgnum), msg.from_[0]['email'], msg.subject))
